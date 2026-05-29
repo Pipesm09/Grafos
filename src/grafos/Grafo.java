@@ -62,7 +62,7 @@ public class Grafo {
         } else {
             //ya hay camino
             Nodo p = vec[indiceOrigen]; //p se para en el que tiene nodo, ya sea el primero, seguno, tercero, etc..... xxdxdXDXDXdxdxd
-            while (p != null) {
+            while (p.getSiguiente() != null) {
                 if (p.getDestino() == destino)//quiere decir que si en la posicion origen se quiere insertar el mismo nodo, no se hace
                 {
                     return;

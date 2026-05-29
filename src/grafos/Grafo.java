@@ -10,12 +10,12 @@ package grafos;
  */
 public class Grafo {
 
-    private int[] vertices; //va a guardar los vertices
+    private char [] vertices; //va a guardar los vertices
     private Nodo[] vec; //va a guardar los caminos de los vertices en filas
     private int cantVertices; //sirvira para insertar y dar el tamaño
 
     public Grafo(int maxVertices) {
-        this.vertices = new int[maxVertices];
+        this.vertices = new char [maxVertices];
         this.vec = new Nodo[maxVertices]; //aqui se le da el tamaño a la lista de adyacencia por ser V*V
         this.cantVertices = 0;
     }
@@ -24,7 +24,7 @@ public class Grafo {
     public void insertarVertice(int dato) {
         // se verifica cada vez si ya se lleno el arreglo de os vectores con su cantidad
         if (cantVertices < vertices.length) {
-            vertices[cantVertices] = dato; //se inserta de 0 hasta el tamaña del arreglo, por eso cantVertices=0
+            vertices[cantVertices] = (char) dato; //se inserta de 0 hasta el tamaña del arreglo, por eso cantVertices=0
             vec[cantVertices] = null; //esto para evitar errores, porque despues se utilizara :V
             cantVertices++; //se avanza sin necesidad de un ciclo, ya que cada vertice le corresponde solo un espacio
         } else {
@@ -33,7 +33,7 @@ public class Grafo {
     }
 
     //procedo a conectar los vertices papu :V, con el indice pero este se encuentra con este metodo
-    public int buscarIndice(int dato /*el vertice*/) {
+    public int buscarIndice(char dato /*el vertice*/) {
         for (int i = 0; i < cantVertices; i++) { //se busca con un for cada vertice en el arreglo vertices
             if (vertices[i] == dato) {
                 return i; //se retornara el indice una vez que encuentre el vertice
@@ -44,7 +44,7 @@ public class Grafo {
 
     //se va conectar por aristas los nodos papu :V
     //los parametros seran el vertice donde sale o el primero y su destino que sera en orden segun el usuario y se creara nodo por cada enlace
-    public void insertarArista(int origen, int destino) {
+    public void insertarArista(char  origen, char destino) {
         int indiceOrigen = buscarIndice(origen);
         int indiceDestino = buscarIndice(destino);
         //se verifica entonces si estos vertices o indices estan en el grafo
@@ -77,9 +77,9 @@ public class Grafo {
 
     private class verticeExacto {
 
-        int dato;
+        char  dato;
 
-        public verticeExacto(int dato) {
+        public verticeExacto(char dato) {
             this.dato = dato;
         }
     }

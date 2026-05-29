@@ -10,28 +10,16 @@ package grafos;
  */
 public class Nodo {
     private Nodo siguiente;
-    private int destino;
+    private char destino; // <-- CAMBIADO A char
 
-    public Nodo(int destino) {
+    public Nodo(char destino) {
+        this.destino = destino;
         this.siguiente = null;
-        this.destino = destino;
     }
 
-    public Nodo getSiguiente() {
-        return siguiente;
-    }
-
-    public void setSiguiente(Nodo siguiente) {
-        this.siguiente = siguiente;
-    }
-
-    public int getDestino() {
-        return destino;
-    }
-
-    public void setDestino(int destino) {
-        this.destino = destino;
-    }
-    
+    public Nodo getSiguiente() { return siguiente; }
+    public void setSiguiente(Nodo siguiente) { this.siguiente = siguiente; }
+    public char getDestino() { return destino; } // <-- CAMBIADO A char
+    public void setDestino(char destino) { this.destino = destino; } // <-- CAMBIADO A char
 }
 

@@ -2,18 +2,12 @@ package grafos;
 
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author ASUS
- */
 public class Grafos {
 
-    // Instancia del Grafo global para que los métodos la puedan modificar
     static Grafo miGrafo = null;
 
     public static void main(String[] args) {
         int opc = 0;
-
         do {
             opc = Menu();
             switch (opc) {
@@ -21,87 +15,77 @@ public class Grafos {
                     IngresarDatosGrafo();
                     break;
                 case 2:
-                    if (miGrafo != null) {
-                        miGrafo.mostrarListaAdyacencia();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Error: Primero debe ingresar un grafo (Opción 1).");
-                    }
+                    if (miGrafo != null) miGrafo.mostrarListaAdyacencia();
+                    else JOptionPane.showMessageDialog(null, "Cargue el grafo en la opción 1.");
                     break;
                 case 3:
-                    if (miGrafo != null) {
-                        miGrafo.determinarTipoGrado();
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Error: Primero debe ingresar un grafo (Opción 1).");
-                    }
+                    if (miGrafo != null) miGrafo.determinarTipoGrado();
+                    else JOptionPane.showMessageDialog(null, "Cargue el grafo en la opción 1.");
                     break;
                 case 0:
-                    System.out.println("Saliendo del programa de Grafos...");
+                    System.out.println("Saliendo...");
                     break;
-                default:
-                    JOptionPane.showMessageDialog(null, "Opción incorrecta. Intente de nuevo.");
             }
-
         } while (opc != 0);
     }
 
-    // ==========================================
-    // MENÚ PRINCIPAL CON JOPTIONPANE
-    // ==========================================
     public static int Menu() {
         String input = JOptionPane.showInputDialog(null, 
                 "****** Menu Principal de Grafos ******\n"
-                + "1. Ingresar Datos del Grafo (Vértices y Aristas)\n"
-                + "2. Mostrar Lista de Adyacencia (Ver en Consola)\n"
-                + "3. Determinar Tipo de Grafo (Dirigido / No Dirigido)\n"
+                + "1. Ingresar Datos en formato de línea\n"
+                + "2. Mostrar Lista de Adyacencia\n"
+                + "3. Determinar Tipo (Dirigido/No Dirigido)\n"
                 + "0. Salir\n\n"
                 + "Ingrese una opción:");
-        
-        // Evitamos error si el usuario cierra la ventana de diálogo (X o Cancelar)
-        if (input == null) {
-            return 0;
-        }
+        if (input == null) return 0;
         return Integer.parseInt(input);
     }
 
-    // ==========================================
-    // CAPTURA DE DATOS DINÁMICA
-    // ==========================================
+    // ===================================================
+    // AQUÍ OCURRE EL PARSEO CON .split()
+    // ===================================================
     public static void IngresarDatosGrafo() {
-        // 1. Pedir el número total de vértices (para inicializar el vector con tamaño fijo)
-        String inputV = JOptionPane.showInputDialog("¿Cuántos vértices tendrá el grafo?");
-        if (inputV == null || inputV.isEmpty()) return;
-        int numVertices = Integer.parseInt(inputV);
+        // Paso 1: Leer todos los vértices en una sola línea (Ej: A,B,C,D)
+        String verticesInput = JOptionPane.showInputDialog(
+                "Ingrese los vértices separados por comas");
+        
+        if (verticesInput == null || verticesInput.trim().isEmpty()) return;
 
-        // Inicializamos la instancia global con el tamaño definido
-        miGrafo = new Grafo(numVertices);
+        // Rompemos la cadena usando la coma como separador
+        String[] partesVertices = verticesInput.split(",");
+        
+        // Inicializamos el grafo con la cantidad exacta de partes que salieron
+        miGrafo = new Grafo(partesVertices.length);
 
-        // 2. Leer los nombres de los vértices (valores numéricos como en tu tablero)
-        for (int i = 0; i < numVertices; i++) {
-            String verticeInput = JOptionPane.showInputDialog("Vértice " + (i + 1) + " de " + numVertices + "\nDigite el valor numérico:");
-            if (verticeInput != null && !verticeInput.isEmpty()) {
-                int valor = Integer.parseInt(verticeInput);
-                miGrafo.insertarVertice(valor);
+        // Insertamos cada letra en el grafo
+        for (int i = 0; i < partesVertices.length; i++) {
+            // Tomamos la primera letra del string limpio (con trim() quitamos espacios accidentales)
+            char letra = partesVertices[i].trim().charAt(0);
+            miGrafo.insertarVertice(letra);
+        }
+
+        // Paso 2: Leer todas las aristas en una sola línea (Ej: A,B-B,C-A,C)
+        String aristasInput = JOptionPane.showInputDialog(
+                "Ingrese las conexiones separadas por guiones");
+
+        if (aristasInput != null && !aristasInput.trim().isEmpty()) {
+            // Rompemos primero por el guion (-) para separar cada "carretera"
+            String[] carreteras = aristasInput.split("-");
+
+            for (int i = 0; i < carreteras.length; i++) {
+                // Cada "carretera" es algo como "A,B". La rompemos por la coma (,)
+                String[] origenYdestino = carreteras[i].split(",");
+                
+                if (origenYdestino.length == 2) {
+                    char origen = origenYdestino[0].trim().charAt(0);
+                    char destino = origenYdestino[1].trim().charAt(0);
+                    
+                    // Insertamos en el grafo
+                    miGrafo.insertarArista(origen, destino);
+                }
             }
         }
 
-        // 3. Pedir el número de conexiones (aristas)
-        String inputA = JOptionPane.showInputDialog("¿Cuántas conexiones (aristas) va a ingresar?");
-        if (inputA != null && !inputA.isEmpty()) {
-            int numAristas = Integer.parseInt(inputA);
-
-            // Bucle para capturar origen y destino de cada carretera
-            for (int i = 0; i < numAristas; i++) {
-                String origenInput = JOptionPane.showInputDialog("Conexión " + (i + 1) + " de " + numAristas + "\nDigite el vértice de ORIGEN:");
-                int origen = Integer.parseInt(origenInput);
-
-                String destinoInput = JOptionPane.showInputDialog("Conexión " + (i + 1) + " de " + numAristas + "\nDigite el vértice de DESTINO:");
-                int destino = Integer.parseInt(destinoInput);
-
-                // Insertamos la arista tal como la escribe el usuario (una vía)
-                miGrafo.insertarArista(origen, destino);
-            }
-        }
-
-        JOptionPane.showMessageDialog(null, "Grafo cargado exitosamente. Puede verlo en la opción 2.");
+        JOptionPane.showMessageDialog(null, "Grafo cargado y parseado exitosamente.");
     }
 }

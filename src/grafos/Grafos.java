@@ -6,14 +6,6 @@ import javax.swing.JOptionPane;
  *
  * @author ASUS
  */
-package grafos;
-
-import javax.swing.JOptionPane;
-
-/**
- * Clase principal que controla el menú interactivo para el proyecto de Grafos.
- * @author andre
- */
 public class Grafos {
 
     // Instancia del Grafo global para que los métodos la puedan modificar

@@ -75,26 +75,17 @@ public class Grafo {
         }
     }
 
-    private class verticeExacto {
-
-        char  dato;
-
-        public verticeExacto(char dato) {
-            this.dato = dato;
-        }
-    }
-
     //metodos para poder anaalizar los gafros y ver las conexiones de los vertices (:(((((((((((()
-    private boolean existeArista(verticeExacto origen, verticeExacto destino) {
+    private boolean existeArista(char origen, char destino) {
         //este metodo verifica si hay camino directo entre vertices por ende necesito el indice del vertice o los vertices
-        int indiceOrigen = buscarIndice(origen.dato);
+        int indiceOrigen = buscarIndice(origen);
         if (indiceOrigen == -1) {//o sea que no hay vertice
             return false;
         }
         //si, si hay vertice se recorre su fila hasta null para ver is hay camino
         Nodo p = vec[indiceOrigen];
         while (p != null) {
-            if (p.getDestino() == destino.dato) {
+            if (p.getDestino() == destino) {
                 return true; //encontre el camino WWWW
             }
             p = p.getSiguiente();
@@ -103,32 +94,32 @@ public class Grafo {
     }
 
     //metodo para ver si el grafo es dirigido
-    public void determinarTipoGrado() {
+    public boolean determinarTipoGrado() {
         if (cantVertices == 0) { //por si no hay vertices
             System.out.println("El grafo esta vacio");
-            return;
+            return false;
         }
         //se debe de ir por cada vertice y por cada fila de este vertice para ver si existe camino de ida, debe de existir camino de regreso
         //si esto paso es NO DIRIGIDO, pero si hay ida, pero no regreso en tal solo un vertice es DIRIGIDO
         for (int i = 0; i < cantVertices; i++) {
-            verticeExacto p = new verticeExacto(vertices[i]); // un p tipo vertice que servira para comparar el origen con el destino 
+            char p = vertices[i]; // un p tipo vertice que servira para comparar el origen con el destino 
             Nodo aristaActual = vec[i]; //nodo para recorrer mmg
             while (aristaActual != null) {
                 //se recorre la lista de adyacencia en la fial de ese vertices[i]
-                verticeExacto destino = new verticeExacto(aristaActual.getDestino());
+                char destino = aristaActual.getDestino(); //vertice al cual se quiere ir
                 //aqui se verifica si existe aristaActual va a destino, debe de exister el nodo destino vaya a la AristaActual o algo asi xdxdxd
                 if (!existeArista(destino, p)) {
                     System.out.println("El grafo es DIRIGIDO");
-                    return;
+                    return true;
                 }
                 //si no se avanza
                 aristaActual = aristaActual.getSiguiente();
-
             }
         }
-        //si llego hasta aca suscribite :VVVV:VV::V:V:V.v.v.v.v.V::V
+        //si llego hasta aca suscribete :VVVV:VV::V:V:V.v.v.v.v.V::V
         //no mentiras, si llego hasta aca signidica que hubo tanto ida-regreso como regreso-id entonces es NO DIRIGIDO
         System.out.println("\"El grafo es NO DIRIGIDO.\"");
+        return false;
     }
 
     //mostrar lista de adyacencia

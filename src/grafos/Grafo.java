@@ -4,6 +4,9 @@
  */
 package grafos;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  *
  * @author andre
@@ -325,6 +328,54 @@ public class Grafo {
         }
 
         return false;
+    }
+
+    public void bfs(char inicio) {
+
+        int indiceInicio = buscarIndice(inicio);
+
+        if (indiceInicio == -1) {
+            System.out.println("El vertice no existe.");
+            return;
+        }
+
+        boolean[] visitado = new boolean[cantVertices];
+
+        Queue<Character> cola = new LinkedList<>();
+
+        visitado[indiceInicio] = true;
+        cola.add(inicio);
+
+        System.out.println("\n===== RECORRIDO BFS =====");
+
+        while (!cola.isEmpty()) {
+
+            char actual = cola.poll();
+
+            System.out.print(actual + " ");
+
+            int indiceActual = buscarIndice(actual);
+
+            Nodo vecino = vec[indiceActual];
+
+            while (vecino != null) {
+
+                char destino = vecino.getDestino();
+
+                int indiceDestino = buscarIndice(destino);
+
+                if (!visitado[indiceDestino]) {
+
+                    visitado[indiceDestino] = true;
+
+                    cola.add(destino);
+                }
+
+                vecino = vecino.getSiguiente();
+            }
+        }
+
+        System.out.println("\n=========================");
     }
 
 }

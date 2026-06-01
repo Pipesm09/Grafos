@@ -1,6 +1,8 @@
 package grafos;
 
 import javax.swing.JOptionPane;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class Grafos {
 
@@ -140,6 +142,25 @@ public class Grafos {
                                 "Arista " + origen + " → " + destino + " eliminada.");
                     }
                     break;
+                case 10:
+
+                    if (miGrafo == null) {
+                        JOptionPane.showMessageDialog(null,
+                                "Primero debe crear un grafo.");
+                        break;
+                    }
+
+                    String inicio = JOptionPane.showInputDialog(
+                            "Ingrese el vértice inicial para BFS:");
+
+                    if (inicio != null && !inicio.trim().isEmpty()) {
+
+                        char verticeInicio = inicio.trim().charAt(0);
+
+                        miGrafo.bfs(verticeInicio);
+                    }
+
+                    break;
 
                 case 0:
                     System.out.println("Saliendo...");
@@ -160,6 +181,7 @@ public class Grafos {
                 + "7. Eliminar Vértice\n"
                 + "8. Insertar Arista\n"
                 + "9. Eliminar Arista\n"
+                + "10. Recorrido BFS \n "
                 + "0. Salir\n\n"
                 + "Ingrese una opción:");
 

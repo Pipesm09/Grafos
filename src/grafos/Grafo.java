@@ -10,12 +10,12 @@ package grafos;
  */
 public class Grafo {
 
-    private char [] vertices; //va a guardar los vertices
+    private char[] vertices; //va a guardar los vertices
     private Nodo[] vec; //va a guardar los caminos de los vertices en filas
     private int cantVertices; //sirvira para insertar y dar el tamaño
 
     public Grafo(int maxVertices) {
-        this.vertices = new char [maxVertices];
+        this.vertices = new char[maxVertices];
         this.vec = new Nodo[maxVertices]; //aqui se le da el tamaño a la lista de adyacencia por ser V*V
         this.cantVertices = 0;
     }
@@ -44,7 +44,7 @@ public class Grafo {
 
     //se va conectar por aristas los nodos papu :V
     //los parametros seran el vertice donde sale o el primero y su destino que sera en orden segun el usuario y se creara nodo por cada enlace
-    public void insertarArista(char  origen, char destino) {
+    public void insertarArista(char origen, char destino) {
         int indiceOrigen = buscarIndice(origen);
         int indiceDestino = buscarIndice(destino);
         //se verifica entonces si estos vertices o indices estan en el grafo
@@ -143,4 +143,100 @@ public class Grafo {
         }
         System.out.println("=========================================\n");
     }
+
+    //matriz de incidencia V*A
+    public int contarAristas() {
+        int total = 0;
+        //la lista se recorre con un for y un while dentro
+        //porque el for se para en el arreglo de los vertices
+        for (int i = 0; i < cantVertices; i++) {
+            Nodo p = vec[i]; //lista de nodos
+            while (p != null) {
+                total++;
+                p = p.getSiguiente(); //avanza contando cada camino=arista
+            }
+        }
+        return total;
+    }
+
+    public void matrizIncidencia() {
+        int totalAristas = contarAristas();
+        //se valida si no hay aristas o vertices
+        if (cantVertices == 0 || totalAristas == 0) {
+            System.out.println("El grafo NO tiene aristas o vertices suficientes");
+            return;
+        }
+        //creacion de matriz
+        int[][] Matriz = new int[cantVertices][totalAristas];
+        int columnaActual = 0;
+        //esto porque se inserta mas sencillo en columna a columna que fila a fila, porque puede suceder que dos nodos compartan ida y regreso
+        for (int i = 0; i < cantVertices; i++) {
+            //por la manera en que se recorre necesito vertice destino, origen y su camino (si es el primero, segundo o tercero)
+            //esto para ver si se repetien o no, para poner 1, 2 o 3
+            Nodo p = vec[i];
+            while (p != null) {
+                int j = buscarIndice(p.getDestino());
+                if (i == j) {
+                    Matriz[i][columnaActual] = 3;//bucle
+                } else {
+                    //o sea que o uno va (i) y el otro regresa o le entre :v (j)
+                    Matriz[i][columnaActual] = 1;
+                    Matriz[j][columnaActual] = 2;
+                }
+                columnaActual++; //se avanza a la siguente arista
+                p = p.getSiguiente(); // avanza el camino
+            }
+        }
+        System.out.println("\n===== MATRIZ DE INCIDENCIA =====");
+
+        // Imprimir aristas de columnas (E0, E1, E2...)
+        System.out.print("      ");
+        for (int col = 0; col < totalAristas; col++) {
+            System.out.print("E" + col + "  ");
+        }
+        System.out.println();
+
+        // Imprimir las filas con su respectiva información
+        for (int fila = 0; fila < cantVertices; fila++) {
+            System.out.print("[" + vertices[fila] + "]   ");
+            for (int col = 0; col < totalAristas; col++) {
+                System.out.print(Matriz[fila][col] + "   ");
+            }
+            System.out.println();
+        }
+        System.out.println("=================================\n");
+    }
+
+    //DFS (como el dragon ball xdxXDDXxDxdXd
+    //este funciona como el metodo que recorre el grafo sin mirar mas opciones que la mas corta y sin repetir caminos
+    //aca hago un metodo para no tener que meter todo en el main
+    public void alistarDFS(char verticeInicial) {
+        int indiceInicio = buscarIndice(verticeInicial);
+        if (indiceInicio == -1) {
+            System.out.println("El vertice de inicio NO EXISTE");
+        }
+        //se crea el vector visitado que es lo mas CLAVE con tamaña total de el total de vertices
+        int[] visitado = new int[cantVertices];
+        System.out.print("Recorrido DFS desde '" + verticeInicial + "': ");
+        //llamado recursivo que es el que recorre
+        dfsRecursivo(indiceInicio, visitado);
+    }
+
+    private void dfsRecursivo(int v, int[] visitado) {
+        visitado[v] = 1; // se marca de una al vertice que me mandaron o el del incio
+        System.out.print(vertices[v] + " ");
+        Nodo p=vec[v];
+        //se recorre la lista de nodos buscando que haya mas camino, o sea W==0 para que se siga contando el camino, sino se cambia
+        while (p!=null){
+            char datoVecinoEnLaFila = p.getDestino(); //solo sirve para que me de el indice del siguiente dato
+            int w= buscarIndice(datoVecinoEnLaFila); //una vez con el indice se verifica si ya pasamos por este
+            if(visitado[w]==0){
+                //si no hemos pasado por aca se vuelve hallar recursivamente para poner el 1
+                dfsRecursivo (w, visitado);
+            }
+            p=p.getSiguiente(); //en el caso que ya pasamos por este dato simplemente avanza
+            
+        }
+    }
+
 }

@@ -34,13 +34,113 @@ public class Grafos {
                     } else {
                         JOptionPane.showMessageDialog(null, "Error: Primero debe ingresar un grafo (Opción 1).");
                     }
-                case 5: 
+                case 5:
                     String input = JOptionPane.showInputDialog("¿Desde que vertice quiere iniciar el recorrido DFS?");
                     if (input != null && !input.isEmpty()) {
                         char inicio = input.charAt(0);
                         miGrafo.alistarDFS(inicio);
                     }
                     break;
+                case 6: // INSERTAR VERTICE
+
+                    if (miGrafo == null) {
+                        JOptionPane.showMessageDialog(null, "Primero debe crear un grafo.");
+                        break;
+                    }
+
+                    String nuevoVertice = JOptionPane.showInputDialog(
+                            "Ingrese el vértice a insertar:");
+
+                    if (nuevoVertice != null && !nuevoVertice.trim().isEmpty()) {
+
+                        char vertice = nuevoVertice.trim().charAt(0);
+
+                        miGrafo.insertarVertice(vertice);
+
+                        JOptionPane.showMessageDialog(null,
+                                "Vértice " + vertice + " insertado.");
+                    }
+                    break;
+
+                case 7: // ELIMINAR VERTICE
+
+                    if (miGrafo == null) {
+                        JOptionPane.showMessageDialog(null, "Primero debe crear un grafo.");
+                        break;
+                    }
+
+                    String verticeEliminar = JOptionPane.showInputDialog("Ingrese el vértice a eliminar:");
+
+                    if (verticeEliminar != null && !verticeEliminar.trim().isEmpty()) {
+
+                        char vertice = verticeEliminar.trim().charAt(0);
+
+                        if (miGrafo.eliminarVertice(vertice)) {
+
+                            JOptionPane.showMessageDialog(null,
+                                    "Vértice " + vertice + " eliminado.");
+
+                        } else {
+
+                            JOptionPane.showMessageDialog(null,
+                                    "El vértice " + vertice + " no existe.");
+                        }
+                    }
+                    break;
+                case 8: // INSERTAR ARISTA
+
+                    if (miGrafo == null) {
+                        JOptionPane.showMessageDialog(null, "Primero debe crear un grafo.");
+                        break;
+                    }
+
+                    String origenInsertar = JOptionPane.showInputDialog(
+                            "Ingrese el vértice ORIGEN:");
+
+                    String destinoInsertar = JOptionPane.showInputDialog(
+                            "Ingrese el vértice DESTINO:");
+
+                    if (origenInsertar != null && destinoInsertar != null
+                            && !origenInsertar.trim().isEmpty()
+                            && !destinoInsertar.trim().isEmpty()) {
+
+                        char origen = origenInsertar.trim().charAt(0);
+                        char destino = destinoInsertar.trim().charAt(0);
+
+                        miGrafo.insertarArista(origen, destino);
+
+                        JOptionPane.showMessageDialog(null,
+                                "Arista " + origen + " → " + destino + " insertada.");
+                    }
+                    break;
+
+                case 9: // ELIMINAR ARISTA
+
+                    if (miGrafo == null) {
+                        JOptionPane.showMessageDialog(null, "Primero debe crear un grafo.");
+                        break;
+                    }
+
+                    String origenEliminar = JOptionPane.showInputDialog(
+                            "Ingrese el vértice ORIGEN:");
+
+                    String destinoEliminar = JOptionPane.showInputDialog(
+                            "Ingrese el vértice DESTINO:");
+
+                    if (origenEliminar != null && destinoEliminar != null
+                            && !origenEliminar.trim().isEmpty()
+                            && !destinoEliminar.trim().isEmpty()) {
+
+                        char origen = origenEliminar.trim().charAt(0);
+                        char destino = destinoEliminar.trim().charAt(0);
+
+                        miGrafo.eliminarArista(origen, destino);
+
+                        JOptionPane.showMessageDialog(null,
+                                "Arista " + origen + " → " + destino + " eliminada.");
+                    }
+                    break;
+
                 case 0:
                     System.out.println("Saliendo...");
                     break;
@@ -56,11 +156,17 @@ public class Grafos {
                 + "3. Determinar Tipo (Dirigido o No Dirigido)\n"
                 + "4. Mostrar Matriz de Incidencia\n"
                 + "5. Recorrido DFS\n"
+                + "6. Insertar Vértice\n"
+                + "7. Eliminar Vértice\n"
+                + "8. Insertar Arista\n"
+                + "9. Eliminar Arista\n"
                 + "0. Salir\n\n"
                 + "Ingrese una opción:");
+
         if (input == null) {
             return 0;
         }
+
         return Integer.parseInt(input);
     }
 

@@ -225,18 +225,106 @@ public class Grafo {
     private void dfsRecursivo(int v, int[] visitado) {
         visitado[v] = 1; // se marca de una al vertice que me mandaron o el del incio
         System.out.print(vertices[v] + " ");
-        Nodo p=vec[v];
+        Nodo p = vec[v];
         //se recorre la lista de nodos buscando que haya mas camino, o sea W==0 para que se siga contando el camino, sino se cambia
-        while (p!=null){
+        while (p != null) {
             char datoVecinoEnLaFila = p.getDestino(); //solo sirve para que me de el indice del siguiente dato
-            int w= buscarIndice(datoVecinoEnLaFila); //una vez con el indice se verifica si ya pasamos por este
-            if(visitado[w]==0){
+            int w = buscarIndice(datoVecinoEnLaFila); //una vez con el indice se verifica si ya pasamos por este
+            if (visitado[w] == 0) {
                 //si no hemos pasado por aca se vuelve hallar recursivamente para poner el 1
-                dfsRecursivo (w, visitado);
+                dfsRecursivo(w, visitado);
             }
-            p=p.getSiguiente(); //en el caso que ya pasamos por este dato simplemente avanza
-            
+            p = p.getSiguiente(); //en el caso que ya pasamos por este dato simplemente avanza
+
         }
+    }
+
+    public void insertarVertice(char dato) {
+
+        // Verificar que no exista
+        if (buscarIndice(dato) != -1) {
+            System.out.println("El vertice ya existe.");
+            return;
+        }
+
+        // Si el arreglo está lleno, ampliarlo
+        if (cantVertices == vertices.length) {
+
+            char[] nuevoVertices = new char[vertices.length + 1];
+            Nodo[] nuevoVec = new Nodo[vec.length + 1];
+
+            for (int i = 0; i < cantVertices; i++) {
+                nuevoVertices[i] = vertices[i];
+                nuevoVec[i] = vec[i];
+            }
+
+            vertices = nuevoVertices;
+            vec = nuevoVec;
+        }
+
+        vertices[cantVertices] = dato;
+        vec[cantVertices] = null;
+        cantVertices++;
+
+        System.out.println("Vertice " + dato + " insertado.");
+    }
+
+    public boolean eliminarVertice(char vertice) {
+
+        int indice = buscarIndice(vertice);
+
+        if (indice == -1) {
+            return false;
+        }
+
+        for (int i = 0; i < cantVertices; i++) {
+            eliminarArista(vertices[i], vertice);
+        }
+
+        vec[indice] = null;
+
+        for (int i = indice; i < cantVertices - 1; i++) {
+            vertices[i] = vertices[i + 1];
+            vec[i] = vec[i + 1];
+        }
+
+        vertices[cantVertices - 1] = '\0';
+        vec[cantVertices - 1] = null;
+
+        cantVertices--;
+
+        return true;
+    }
+
+    public boolean eliminarArista(char origen, char destino) {
+
+        int indiceOrigen = buscarIndice(origen);
+
+        if (indiceOrigen == -1) {
+            return false;
+        }
+
+        Nodo actual = vec[indiceOrigen];
+        Nodo anterior = null;
+
+        while (actual != null) {
+
+            if (actual.getDestino() == destino) {
+
+                if (anterior == null) {
+                    vec[indiceOrigen] = actual.getSiguiente();
+                } else {
+                    anterior.setSiguiente(actual.getSiguiente());
+                }
+
+                return true;
+            }
+
+            anterior = actual;
+            actual = actual.getSiguiente();
+        }
+
+        return false;
     }
 
 }

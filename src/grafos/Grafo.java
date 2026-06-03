@@ -377,5 +377,43 @@ public class Grafo {
 
         System.out.println("\n=========================");
     }
+     //mostrar matriz de adyacencia papu :V
+    public void mostrarMatrizAdyacencia() {
+        if (cantVertices == 0) {
+            System.out.println("El grafo esta vacio");
+            return;
+        }
+        //se crea matriz V*V
+        int[][] matriz = new int[cantVertices][cantVertices];
+        //se recorre la lista donde esta todito :V
+        for (int i = 0; i < cantVertices; i++) {
+            Nodo p = vec[i];
+            while (p != null) {
+                //buscar si hay camino entre los vertices con el vertice destino
+                int j = buscarIndice(p.getDestino());
+                if (j != -1) {
+                    matriz[i][j] = 1;
+                }
+                p = p.getSiguiente();
+            }
+        }
+        //mostra en pantalla... que pereza
+        System.out.println("\n===== MATRIZ DE ADYACENCIA =====");
+
+        System.out.print("     ");
+        for (int col = 0; col < cantVertices; col++) {
+            System.out.print(vertices[col] + "  ");
+        }
+        System.out.println();
+
+        for (int fila = 0; fila < cantVertices; fila++) {
+            System.out.print("[" + vertices[fila] + "]  ");
+            for (int col = 0; col < cantVertices; col++) {
+                System.out.print(matriz[fila][col] + "  ");
+            }
+            System.out.println();
+        }
+        System.out.println("=================================\n");
+    }
 
 }

@@ -161,6 +161,13 @@ public class Grafos {
                     }
 
                     break;
+                case 11:
+                    if (miGrafo != null) {
+                        miGrafo.mostrarMatrizAdyacencia();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error: Primero debe ingresar un grafo (Opción 1).");
+                    }
+                    break;
 
                 case 0:
                     System.out.println("Saliendo...");
@@ -182,6 +189,7 @@ public class Grafos {
                 + "8. Insertar Arista\n"
                 + "9. Eliminar Arista\n"
                 + "10. Recorrido BFS \n "
+                + "11. Mostrar Matriz de Adyacencia\n"
                 + "0. Salir\n\n"
                 + "Ingrese una opción:");
 

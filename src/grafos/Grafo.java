@@ -253,7 +253,7 @@ public class Grafo {
 
     //DFS (como el dragon ball xdxXDDXxDxdXd
     //este funciona como el metodo que recorre el grafo sin mirar mas opciones que la mas corta y sin repetir caminos
-    //aca hago un metodo para no tener que meter todo en el main
+    //aca hago un metodo para no tener que meter todo en el main 
     public void alistarDFS(char verticeInicial) {
         int indiceInicio = buscarIndice(verticeInicial);
         if (indiceInicio == -1) {

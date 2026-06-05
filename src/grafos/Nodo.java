@@ -11,7 +11,7 @@ package grafos;
 public class Nodo {
 
     private Nodo siguiente;
-    private char destino; // <-- CAMBIADO A char
+    private char destino; 
     private int peso;
 
     public Nodo(char destino, int peso) {

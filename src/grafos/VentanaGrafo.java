@@ -24,8 +24,8 @@ public class VentanaGrafo extends javax.swing.JFrame {
     public VentanaGrafo(Grafo grafo) {
         initComponents();
         this.grafo = grafo;
-        setSize(900, 700);      // tamaño más grande
-        setLocationRelativeTo(null); // centra la ventana
+        setSize(900, 700);      
+        setLocationRelativeTo(null); 
     }
 
     private void dibujarFlecha(Graphics g,
@@ -94,10 +94,8 @@ public class VentanaGrafo extends javax.swing.JFrame {
                 int j = grafo.buscarIndice(p.getDestino());
 
                 if (j != -1) {
-
-                    // ==========================
-                    // CASO 1: BUCLE
-                    // ==========================
+                    
+                    //Bucle
                     if (i == j) {
 
                         g.drawOval(
@@ -112,9 +110,8 @@ public class VentanaGrafo extends javax.swing.JFrame {
                                 posX[i] + 35,
                                 posY[i] - 25
                         );
-                    } // ==========================
-                    // CASO 2: ARISTA NORMAL
-                    // ==========================
+                    }
+                   //Aristas
                     else {
 
                         int x1 = posX[i] + 20;
@@ -142,10 +139,8 @@ public class VentanaGrafo extends javax.swing.JFrame {
                                 finX,
                                 finY
                         );
-
-                        // ==========================
-                        // PESO
-                        // ==========================
+                        
+                        //Peso de las aristas de manera random
                         int pesoX = (inicioX + finX) / 2;
                         int pesoY = (inicioY + finY) / 2;
 
@@ -164,10 +159,8 @@ public class VentanaGrafo extends javax.swing.JFrame {
                                 pesoX - 4,
                                 pesoY + 5
                         );
+                        //Flechas
 
-                        // ==========================
-                        // FLECHAS
-                        // ==========================
                         dirigido = grafo.determinarTipoGrado();
 
                         if (dirigido) {

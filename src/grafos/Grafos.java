@@ -36,6 +36,7 @@ public class Grafos {
                     } else {
                         JOptionPane.showMessageDialog(null, "Error: Primero debe ingresar un grafo (Opción 1).");
                     }
+                    break;
                 case 5:
                     String input = JOptionPane.showInputDialog("¿Desde que vertice quiere iniciar el recorrido DFS?");
                     if (input != null && !input.isEmpty()) {

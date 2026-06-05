@@ -95,41 +95,85 @@ public class VentanaGrafo extends javax.swing.JFrame {
 
                 if (j != -1) {
 
-                    int x1 = posX[i] + 20;
-                    int y1 = posY[i] + 20;
+                    // ==========================
+                    // CASO 1: BUCLE
+                    // ==========================
+                    if (i == j) {
 
-                    int x2 = posX[j] + 20;
-                    int y2 = posY[j] + 20;
+                        g.drawOval(
+                                posX[i] + 25,
+                                posY[i] - 20,
+                                30,
+                                30
+                        );
 
-                    double dx = x2 - x1;
-                    double dy = y2 - y1;
+                        g.drawString(
+                                String.valueOf(p.getPeso()),
+                                posX[i] + 35,
+                                posY[i] - 25
+                        );
+                    } // ==========================
+                    // CASO 2: ARISTA NORMAL
+                    // ==========================
+                    else {
 
-                    double distancia = Math.sqrt(dx * dx + dy * dy);
+                        int x1 = posX[i] + 20;
+                        int y1 = posY[i] + 20;
 
-                    int radioNodo = 20;
+                        int x2 = posX[j] + 20;
+                        int y2 = posY[j] + 20;
 
-                    int inicioX = (int) (x1 + radioNodo * dx / distancia);
-                    int inicioY = (int) (y1 + radioNodo * dy / distancia);
+                        double dx = x2 - x1;
+                        double dy = y2 - y1;
 
-                    int finX = (int) (x2 - radioNodo * dx / distancia);
-                    int finY = (int) (y2 - radioNodo * dy / distancia);
+                        double distancia = Math.sqrt(dx * dx + dy * dy);
 
-                    // Dibujar arista
-                    if (dirigido) {
+                        int radioNodo = 20;
 
-                        dibujarFlecha(
-                                g,
+                        int inicioX = (int) (x1 + dx * radioNodo / distancia);
+                        int inicioY = (int) (y1 + dy * radioNodo / distancia);
+
+                        int finX = (int) (x2 - dx * radioNodo / distancia);
+                        int finY = (int) (y2 - dy * radioNodo / distancia);
+
+                        g.drawLine(
                                 inicioX,
                                 inicioY,
                                 finX,
                                 finY
                         );
 
-                    } else {
+                        // ==========================
+                        // PESO
+                        // ==========================
+                        int pesoX = (inicioX + finX) / 2;
+                        int pesoY = (inicioY + finY) / 2;
 
-                        if (i < j) {
+                        pesoX += (int) (-dy / distancia * 15);
+                        pesoY += (int) (dx / distancia * 15);
 
-                            g.drawLine(
+                        g.drawOval(
+                                pesoX - 10,
+                                pesoY - 10,
+                                20,
+                                20
+                        );
+
+                        g.drawString(
+                                String.valueOf(p.getPeso()),
+                                pesoX - 4,
+                                pesoY + 5
+                        );
+
+                        // ==========================
+                        // FLECHAS
+                        // ==========================
+                        dirigido = grafo.determinarTipoGrado();
+
+                        if (dirigido) {
+
+                            dibujarFlecha(
+                                    g,
                                     inicioX,
                                     inicioY,
                                     finX,
@@ -137,38 +181,6 @@ public class VentanaGrafo extends javax.swing.JFrame {
                             );
                         }
                     }
-
-                    // ==========================
-                    // DIBUJAR PESO 
-                    // ==========================
-                    int medioX = (inicioX + finX) / 2;
-                    int medioY = (inicioY + finY) / 2;
-
-                    int desplazamiento = 18;
-
-                    int textoX = (int) (medioX - desplazamiento * dy / distancia);
-                    int textoY = (int) (medioY + desplazamiento * dx / distancia);
-
-                    String pesoTexto = String.valueOf(p.getPeso());
-
-                    // Fondo blanco detrás del número
-                    g.setColor(java.awt.Color.WHITE);
-
-                    g.fillRect(
-                            textoX - 5,
-                            textoY - 12,
-                            22,
-                            18
-                    );
-
-                    // Texto negro
-                    g.setColor(java.awt.Color.BLACK);
-
-                    g.drawString(
-                            pesoTexto,
-                            textoX,
-                            textoY
-                    );
                 }
 
                 p = p.getSiguiente();

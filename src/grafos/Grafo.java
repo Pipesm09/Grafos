@@ -17,6 +17,18 @@ public class Grafo {
     private Nodo[] vec; //va a guardar los caminos de los vertices en filas
     private int cantVertices; //sirvira para insertar y dar el tamaño
 
+    public char[] getVertices() {
+        return vertices;
+    }
+
+    public Nodo[] getVec() {
+        return vec;
+    }
+
+    public int getCantVertices() {
+        return cantVertices;
+    }
+
     public Grafo(int maxVertices) {
         this.vertices = new char[maxVertices];
         this.vec = new Nodo[maxVertices]; //aqui se le da el tamaño a la lista de adyacencia por ser V*V
@@ -48,6 +60,13 @@ public class Grafo {
     //se va conectar por aristas los nodos papu :V
     //los parametros seran el vertice donde sale o el primero y su destino que sera en orden segun el usuario y se creara nodo por cada enlace
     public void insertarArista(char origen, char destino) {
+        int peso = (int) (Math.random() * 20) + 1;
+
+        insertarArista(origen, destino, peso);
+    }
+
+    // Sobrecarga para darle el mismo peso a una arista no dirigida
+    public void insertarArista(char origen, char destino, int peso) {
         int indiceOrigen = buscarIndice(origen);
         int indiceDestino = buscarIndice(destino);
         //se verifica entonces si estos vertices o indices estan en el grafo
@@ -56,7 +75,7 @@ public class Grafo {
             return;
         }
         //si, si estan entonces crear lista de adyacencia con lista de nodos
-        Nodo nuevo = new Nodo(destino);
+        Nodo nuevo = new Nodo(destino, peso);
         //el nuevo nodo apunta a destino
         //ahora si es la primera conexion, o sea que la lista de nodos=null en la posicion 0
         if (vec[indiceOrigen] == null) {
@@ -76,6 +95,28 @@ public class Grafo {
                 p.setSiguiente(nuevo);
             }
         }
+    }
+
+    public int obtenerPeso(char origen, char destino) {
+
+        int indice = buscarIndice(origen);
+
+        if (indice == -1) {
+            return -1;
+        }
+
+        Nodo p = vec[indice];
+
+        while (p != null) {
+
+            if (p.getDestino() == destino) {
+                return p.getPeso();
+            }
+
+            p = p.getSiguiente();
+        }
+
+        return -1;
     }
 
     //metodos para poder anaalizar los gafros y ver las conexiones de los vertices (:(((((((((((()
@@ -377,7 +418,8 @@ public class Grafo {
 
         System.out.println("\n=========================");
     }
-     //mostrar matriz de adyacencia papu :V
+    //mostrar matriz de adyacencia papu :V
+
     public void mostrarMatrizAdyacencia() {
         if (cantVertices == 0) {
             System.out.println("El grafo esta vacio");
@@ -414,6 +456,102 @@ public class Grafo {
             System.out.println();
         }
         System.out.println("=================================\n");
+    }
+
+    public void caminoMasCorto(char origen, char destino) {
+
+        int origenIdx = buscarIndice(origen);
+        int destinoIdx = buscarIndice(destino);
+
+        if (origenIdx == -1 || destinoIdx == -1) {
+            System.out.println("Origen o destino no existen.");
+            return;
+        }
+
+        int[] distancia = new int[cantVertices];
+        boolean[] visitado = new boolean[cantVertices];
+        int[] anterior = new int[cantVertices];
+
+        for (int i = 0; i < cantVertices; i++) {
+            distancia[i] = Integer.MAX_VALUE;
+            anterior[i] = -1;
+        }
+
+        distancia[origenIdx] = 0;
+
+        for (int k = 0; k < cantVertices; k++) {
+
+            int u = -1;
+            int menor = Integer.MAX_VALUE;
+
+            for (int i = 0; i < cantVertices; i++) {
+
+                if (!visitado[i] && distancia[i] < menor) {
+                    menor = distancia[i];
+                    u = i;
+                }
+            }
+
+            if (u == -1) {
+                break;
+            }
+
+            visitado[u] = true;
+
+            Nodo p = vec[u];
+
+            while (p != null) {
+
+                int v = buscarIndice(p.getDestino());
+
+                if (!visitado[v]) {
+
+                    int nuevaDistancia
+                            = distancia[u] + p.getPeso();
+
+                    if (nuevaDistancia < distancia[v]) {
+
+                        distancia[v] = nuevaDistancia;
+                        anterior[v] = u;
+                    }
+                }
+
+                p = p.getSiguiente();
+            }
+        }
+
+        if (distancia[destinoIdx] == Integer.MAX_VALUE) {
+
+            System.out.println(
+                    "No existe camino entre "
+                    + origen + " y " + destino);
+
+            return;
+        }
+
+        System.out.println("\n===== CAMINO MÁS CORTO =====");
+
+        System.out.println(
+                "Distancia total: "
+                + distancia[destinoIdx]);
+
+        imprimirCamino(destinoIdx, anterior);
+
+        System.out.println("\n============================");
+    }
+
+    private void imprimirCamino(int actual, int[] anterior) {
+
+        if (actual == -1) {
+            return;
+        }
+
+        imprimirCamino(
+                anterior[actual],
+                anterior);
+
+        System.out.print(
+                vertices[actual] + " ");
     }
 
 }

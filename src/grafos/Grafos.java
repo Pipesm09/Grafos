@@ -168,7 +168,46 @@ public class Grafos {
                         JOptionPane.showMessageDialog(null, "Error: Primero debe ingresar un grafo (Opción 1).");
                     }
                     break;
+                case 12:
+                    if (miGrafo == null) {
 
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Primero debe crear un grafo.");
+
+                        break;
+                    }
+
+                    VentanaGrafo ventana = new VentanaGrafo(miGrafo);
+
+                    ventana.setVisible(true);
+                    opc = 0;
+                    break;
+                case 13:
+                    if (miGrafo == null) {
+
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Primero debe crear un grafo.");
+
+                        break;
+                    }
+
+                    String origen = JOptionPane.showInputDialog(
+                            "Vértice origen:");
+
+                    String destino = JOptionPane.showInputDialog(
+                            "Vértice destino:");
+
+                    if (origen != null && destino != null
+                            && !origen.isEmpty()
+                            && !destino.isEmpty()) {
+
+                        miGrafo.caminoMasCorto(
+                                origen.charAt(0),
+                                destino.charAt(0));
+                    }
+                    break;
                 case 0:
                     System.out.println("Saliendo...");
                     break;
@@ -190,6 +229,8 @@ public class Grafos {
                 + "9. Eliminar Arista\n"
                 + "10. Recorrido BFS \n "
                 + "11. Mostrar Matriz de Adyacencia\n"
+                + "12. Visualizar el grafo. \n"
+                + "13. Camino mas corto. \n"
                 + "0. Salir\n\n"
                 + "Ingrese una opción:");
 
@@ -230,11 +271,25 @@ public class Grafos {
                 String[] origenYdestino = carreteras[i].split(",");
 
                 if (origenYdestino.length == 2) {
+
                     char origen = origenYdestino[0].trim().charAt(0);
                     char destino = origenYdestino[1].trim().charAt(0);
 
-                    // Insertamos en el grafo
-                    miGrafo.insertarArista(origen, destino);
+                    int pesoExistente
+                            = miGrafo.obtenerPeso(destino, origen);
+
+                    if (pesoExistente != -1) {
+
+                        miGrafo.insertarArista(
+                                origen,
+                                destino,
+                                pesoExistente
+                        );
+
+                    } else {
+
+                        miGrafo.insertarArista(origen, destino);
+                    }
                 }
             }
         }
